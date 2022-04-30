@@ -1,0 +1,32 @@
+<% layout(".././layouts/main") %>
+<div class="row">
+  <div class="col-6">
+    <h1>Postni taxrirlash</h1>
+    <form action="/post/<%= post._id %>?_method=PUT" method="post">
+      <div class="form-group my-3">
+        <label for="title">Sarlavha</label>
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          name="post[title]"
+          value="<%= post.title %>"
+        />
+      </div>
+      <div class="form-group my-3">
+        <label for="body">Matn</label>
+        <textarea
+          class="form-control"
+          id="body"
+          name="post[body]"
+          style="height: 7rem"
+        >
+<%= post.body %></textarea
+        >
+      </div>
+      <button type="submit" class="btn btn-primary my-3">
+        Postni O'zgartirish
+      </button>
+    </form>
+  </div>
+</div>

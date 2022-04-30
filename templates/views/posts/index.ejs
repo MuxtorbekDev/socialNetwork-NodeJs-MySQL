@@ -1,0 +1,9 @@
+<% layout(".././layouts/main") %>
+
+<ul>
+  <% for(post of posts){ %>
+  <li><a href="/post/<%=post._id%>"><%= post.title %></a></li>
+  <% } %>
+
+  <a class="btn btn-primary my-3" href="/posts/new">Post qo'shish</a>
+</ul>

@@ -1,14 +1,18 @@
 const express = require("express");
-const { connect } = require("./db/config");
 const { buildDB } = require("./models/db-architechture/build");
 const { Post } = require("./models/Post");
+const engine = require("ejs-mate");
 const path = require("path");
+const methodOverride = require("method-override");
 const app = express();
 
 buildDB();
 
+app.use(express.urlencoded({ extended: true }));
+app.engine("ejs", engine);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../templates/views"));
+app.use(methodOverride("_method"));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -16,11 +20,45 @@ app.get("/", (req, res) => {
 
 app.get("/posts", async (req, res) => {
   const posts = await Post.findAll({});
-  res.json(posts);
+  res.render("posts/index", { posts });
 });
 
 app.get("/posts/new", (req, res) => {
   res.render("posts/new");
+});
+
+app.post("/posts", async (req, res) => {
+  const { post } = req.body;
+  await Post.create(post);
+  res.redirect("/posts");
+});
+
+app.get("/post/:id", async (req, res) => {
+  const { id } = req.params;
+  const post = await Post.findByPk(id);
+
+  if (!post) return console.log("Post topilmadi");
+  res.render("posts/single", { post });
+});
+
+app.get("/post/:id/edit", async (req, res) => {
+  const { id } = req.params;
+  const post = await Post.findByPk(id);
+  if (!post) return console.log("Post topilmadi");
+  res.render("posts/edit", { post });
+});
+
+app.put("/post/:id", async (req, res) => {
+  const { id } = req.params;
+  const { post } = req.body;
+  await Post.update({ ...post }, { where: { _id: id } });
+  res.redirect(`/post/${id}`);
+});
+
+app.delete("/post/:id", async (req, res) => {
+  const { id } = req.params;
+  await Post.destroy({ where: { _id: id } });
+  res.redirect("/posts");
 });
 
 app.listen(4001, () => {
