@@ -4,6 +4,7 @@ const { Post } = require("./models/Post");
 const engine = require("ejs-mate");
 const path = require("path");
 const methodOverride = require("method-override");
+const { validatePosts } = require("./middlewares/model-validation");
 const app = express();
 
 buildDB();
@@ -15,7 +16,7 @@ app.set("views", path.join(__dirname, "../templates/views"));
 app.use(methodOverride("_method"));
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.render("home");
 });
 
 app.get("/posts", async (req, res) => {
@@ -27,7 +28,7 @@ app.get("/posts/new", (req, res) => {
   res.render("posts/new");
 });
 
-app.post("/posts", async (req, res) => {
+app.post("/posts", validatePosts, async (req, res) => {
   const { post } = req.body;
   await Post.create(post);
   res.redirect("/posts");
@@ -41,7 +42,7 @@ app.get("/post/:id", async (req, res) => {
   res.render("posts/single", { post });
 });
 
-app.get("/post/:id/edit", async (req, res) => {
+app.get("/post/:id/edit", validatePosts, async (req, res) => {
   const { id } = req.params;
   const post = await Post.findByPk(id);
   if (!post) return console.log("Post topilmadi");
@@ -59,6 +60,11 @@ app.delete("/post/:id", async (req, res) => {
   const { id } = req.params;
   await Post.destroy({ where: { _id: id } });
   res.redirect("/posts");
+});
+
+app.use((err, req, res, next) => {
+  const { status = 500, message = "No'malum xatolik yuz berdi!" } = err;
+  res.status(status).render("error", { message, status });
 });
 
 app.listen(4001, () => {
