@@ -5,6 +5,7 @@ const engine = require("ejs-mate");
 const path = require("path");
 const methodOverride = require("method-override");
 const { validatePosts } = require("./middlewares/model-validation");
+const { Comment } = require("./models/Comment");
 const app = express();
 
 buildDB();
@@ -36,20 +37,31 @@ app.post("/posts", validatePosts, async (req, res) => {
 
 app.get("/post/:id", async (req, res) => {
   const { id } = req.params;
-  const post = await Post.findByPk(id);
+  const post = await Post.findByPk(id, {
+    include: [
+      {
+        model: Comment,
+        attributes: ["_id", "content", "createdAt", "updatedAt"],
+      },
+    ],
+  });
 
   if (!post) return console.log("Post topilmadi");
-  res.render("posts/single", { post });
+  console.log();
+  const comments = post.dataValues.Comments;
+  console.log(post.dataValues);
+  res.render("posts/single", { post, comments });
 });
 
-app.get("/post/:id/edit", validatePosts, async (req, res) => {
+app.get("/post/:id/edit", async (req, res) => {
   const { id } = req.params;
   const post = await Post.findByPk(id);
   if (!post) return console.log("Post topilmadi");
+  console.log(post);
   res.render("posts/edit", { post });
 });
 
-app.put("/post/:id", async (req, res) => {
+app.put("/post/:id", validatePosts, async (req, res) => {
   const { id } = req.params;
   const { post } = req.body;
   await Post.update({ ...post }, { where: { _id: id } });
@@ -60,6 +72,20 @@ app.delete("/post/:id", async (req, res) => {
   const { id } = req.params;
   await Post.destroy({ where: { _id: id } });
   res.redirect("/posts");
+});
+
+app.post("/post/:id/comment", async (req, res) => {
+  const { id } = req.params;
+  const { comment } = req.body;
+  const commentObj = Comment.build({ ...comment, postId: id });
+  // const commentObj = Comment.build(comment);
+  // commentObj.PostId = id;
+  await commentObj.save();
+  res.redirect(`/post/${id}`);
+});
+
+app.all("*", (req, res, next) => {
+  next(new BlogErrors("404 Not Found", 404));
 });
 
 app.use((err, req, res, next) => {
