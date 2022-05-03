@@ -5,7 +5,6 @@ const CommentRoutes = express.Router();
 CommentRoutes.post("/post/:id/comment", async (req, res) => {
   const { id } = req.params;
   const { comment } = req.body;
-  console.log(id);
   const commentObj = Comment.build(comment);
   commentObj.PostId = id;
   await commentObj.save();
