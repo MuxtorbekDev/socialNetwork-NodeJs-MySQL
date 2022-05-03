@@ -18,10 +18,16 @@
     </div>
   </div>
   <div class="col-6">
-    <form action="/post/<%= post._id%>/comment" method="post">
+    <form
+      class="needs-validation"
+      action="/post/<%= post._id%>/comment"
+      novalidate
+      method="post"
+    >
       <div class="form-group">
         <label for="comment">Izoh</label>
         <textarea
+          required
           class="form-control"
           id="comment"
           name="comment[content]"
@@ -30,5 +36,28 @@
       </div>
       <button class="btn my-3 btn-primary">Yuborish</button>
     </form>
+    <div>
+      <% if (comments.length > 0) { %> <% comments.forEach(function(comment) {
+      %>
+      <div class="card my-3">
+        <div class="card-body">
+          <h5 class="card-title"><%= comment.content %></h5>
+          <p class="card-text"><%= comment.createdAt.toDateString() %></p>
+          <form
+            action="/post/<%= post._id%>/comment/<%=comment._id%>?_method=DELETE"
+            method="post"
+          >
+            <button class="btn btn-danger">O'chirish</button>
+          </form>
+        </div>
+      </div>
+      <% }); %> <% } else { %>
+      <div class="card my-3">
+        <div class="card-body">
+          <h5 class="card-title">Izohlar yo'q</h5>
+        </div>
+      </div>
+      <% } %>
+    </div>
   </div>
 </div>

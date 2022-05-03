@@ -1,10 +1,10 @@
 const { connect } = require("../../db/config");
-const { Post } = require("../../models/Post");
 const { Comment } = require("../Comment");
+const { Post } = require("../Post");
 
 const buildDB = async (forceOption = false) => {
-  Comment.belongsTo(Post, { onDelete: "cascade" });
-  Post.hasMany(Comment, { onDelete: "cascade" });
+  Comment.belongsTo(Post, { onDelete: "CASCADE" });
+  Post.hasMany(Comment, { onDelete: "CASCADE" });
 
   connect(forceOption);
 };
