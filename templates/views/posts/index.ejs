@@ -1,9 +1,25 @@
 <% layout(".././layouts/main") %>
-
-<ul>
-  <% for(post of posts){ %>
-  <li><a href="/post/<%=post._id%>"><%= post.title %></a></li>
-  <% } %>
-
+<div>
   <a class="btn btn-primary my-3" href="/posts/new">Post qo'shish</a>
-</ul>
+  <% for(post of posts){ %>
+  <div class="cardPost">
+    <div class="cardText">
+      <div>
+        <h3><%= post.title %></h3>
+        <% body = ''%> <% if(post.body.length > 300){ %> <% body =
+        post.body.substring(0, 300) + "..." %> <% } else { %> <% body =
+        post.body%> <% } %>
+
+        <p><%= body %></p>
+      </div>
+      <a class="btn btn-primary" href="/post/<%=post._id%>">Ba'tafsil O'qish</a>
+    </div>
+    <div class="cardImage">
+      <img
+        src="data:image/png;base64,<%= post.Photos[0].dataValues.data %>"
+        alt="<%= post.Photos[0].dataValues.description %>"
+      />
+    </div>
+  </div>
+  <% } %>
+</div>

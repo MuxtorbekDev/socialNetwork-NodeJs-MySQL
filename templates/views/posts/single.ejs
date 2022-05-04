@@ -6,9 +6,9 @@
     <span><%= post.updatedAt.toDateString() %></span>
     <div class="row">
       <div class="col-6">
-        <a class="btn btn-warning" href="/post/<%= post._id %>/edit"
-          >Postni taxrirlash</a
-        >
+        <button class="btn btn-secondary" href="/post/<%= post._id %>/edit">
+          Postni taxrirlash
+        </button>
       </div>
       <div class="col-6">
         <form action="/post/<%= post._id %>?_method=DELETE" method="post">
