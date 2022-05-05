@@ -4,9 +4,10 @@ const { Comment } = require("../models/Comment");
 const { Post } = require("../models/Post");
 const PostRouter = express.Router();
 const multer = require("multer");
-const { BlogError } = require("../helpers/BlogErrors");
 const createPhotos = require("../helpers/createPhotos");
 const { Photo } = require("../models/Photo");
+const { BlogErrors } = require("../helpers/BlogErrors");
+const moment = require("moment");
 
 const upload = multer({
   limits: {
@@ -59,39 +60,36 @@ PostRouter.get("/post/:id", async (req, res) => {
         model: Comment,
         attributes: ["_id", "content", "createdAt", "updatedAt"],
       },
-    ],
-  });
-
-  if (!post) throw new BlogErrors("Post topilmadi!", 404);
-  const comments = post.dataValues.Comments;
-  res.render("posts/single", { post, comments });
-});
-
-PostRouter.get("/post/:id/edit", async (req, res) => {
-  const { id } = req.params;
-  const post = await Post.findByPk(id, {
-    include: [
       {
         model: Photo,
         attributes: ["data", "description"],
       },
     ],
   });
+
+  if (!post) throw new BlogErrors("Post topilmadi!", 404);
+  const comments = post.dataValues.Comments;
+  const photos = post.dataValues.Photos;
+  const createAt = moment(post.createAt).fromNow();
+  res.render("posts/single", { post, comments, photos, createAt });
+});
+
+PostRouter.get("/post/:id/edit", async (req, res) => {
+  const { id } = req.params;
+  const post = await Post.findByPk(id);
   if (!post) return console.log("Post topilmadi");
   res.render("posts/edit", { post });
 });
 
-PostRouter.put(
-  "/post/:id",
-  upload.array("image"),
-  validatePosts,
-  async (req, res) => {
-    const { id } = req.params;
-    const { post } = req.body;
-    await Post.update({ ...post }, { where: { _id: id } });
-    res.redirect(`/post/${id}`);
-  }
-);
+PostRouter.put("/post/:id", upload.array("image"), async (req, res) => {
+  const { id } = req.params;
+  const { files } = req;
+  const { post } = req.body;
+  console.log(files);
+  await Post.update({ ...post }, { where: { _id: id } });
+  await createPhotos(files, id);
+  res.redirect(`/post/${id}`);
+});
 
 PostRouter.delete("/post/:id", async (req, res) => {
   const { id } = req.params;
