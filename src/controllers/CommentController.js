@@ -1,18 +1,19 @@
-const { Comment } = require("../models/Comment");
+const {
+  createComment,
+  deleteComment,
+} = require("../models/DAL/CommentRepository");
 
 const postComments = async (req, res) => {
   const { id } = req.params;
   const { comment } = req.body;
-  const commentObj = Comment.build(comment);
-  commentObj.PostId = id;
-  await commentObj.save();
+  await createComment(id, comment);
   res.redirect(`/post/${id}`);
 };
 
 const commentDelete = (req, res) => {
   const { id } = req.params;
   const { commentId } = req.params;
-  Comment.destroy({ where: { _id: commentId } });
+  deleteComment(commentId);
   res.redirect(`/post/${id}`);
 };
 

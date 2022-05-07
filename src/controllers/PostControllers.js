@@ -1,19 +1,18 @@
 const { BlogError } = require("../helpers/BlogErrors");
-const { createPhotos, deletePhoto } = require("../helpers/PhotoHendlers");
-const { Comment } = require("../models/Comment");
 const { Photo } = require("../models/Photo");
 const { Post } = require("../models/Post");
 const moment = require("moment");
+const {
+  getAllPosts,
+  createPosts,
+  findById,
+  findByIdFull,
+  updatePost,
+  deletePost,
+} = require("../models/DAL/PostRepository");
 
 const showAll = async (req, res) => {
-  const posts = await Post.findAll({
-    include: [
-      {
-        model: Photo,
-        attributes: ["data", "description"],
-      },
-    ],
-  });
+  const posts = await getAllPosts();
   res.render("posts/index", { posts });
 };
 
@@ -24,27 +23,13 @@ const postNew = (req, res) => {
 const createPost = async (req, res) => {
   const { post } = req.body;
   const { files } = req;
-  const postData = Post.build(post);
-  await postData.save();
-
-  await createPhotos(files, postData._id);
+  await createPosts(post, files);
   res.redirect("/posts");
 };
 
 const postFull = async (req, res) => {
   const { id } = req.params;
-  const post = await Post.findByPk(id, {
-    include: [
-      {
-        model: Comment,
-        attributes: ["_id", "content", "createdAt", "updatedAt"],
-      },
-      {
-        model: Photo,
-        attributes: ["data", "description"],
-      },
-    ],
-  });
+  const post = await findByIdFull(id);
 
   if (!post) throw new BlogError("Post topilmadi!", 404);
   const comments = post.dataValues.Comments;
@@ -55,6 +40,7 @@ const postFull = async (req, res) => {
 
 const postEdit = async (req, res) => {
   const { id } = req.params;
+  // const post = findById(id);
   const post = await Post.findByPk(id, {
     include: [
       {
@@ -70,17 +56,16 @@ const postEdit = async (req, res) => {
 
 const postEditPut = async (req, res) => {
   const { id } = req.params;
-  const { files } = req;
+  const newPhotos = req.files;
   const { post } = req.body;
-  await deletePhoto(req.body.deletePhotos);
-  await Post.update({ ...post }, { where: { _id: id } });
-  await createPhotos(files, id);
+  const { deletePhotos } = req.body;
+  await updatePost(id, post, newPhotos, deletePhotos);
   res.redirect(`/post/${id}`);
 };
 
 const postDelete = async (req, res) => {
   const { id } = req.params;
-  await Post.destroy({ where: { _id: id } });
+  deletePost(id);
   res.redirect("/posts");
 };
 

@@ -35,7 +35,7 @@
           class="form-control"
           id="body"
           name="post[body]"
-          style="height: 7rem"
+          style="height: 9rem"
           required
         >
 <%= post.body %></textarea
@@ -44,11 +44,15 @@
 
       <div class=" editPhoto">
         <% photos.forEach((photo, i) => { %>
-          <img class="img-thumbnail w-40 h-40" src="data:image/png;base64,<%= photo.data %>" alt="<%= photo.description %>">
       
-        <div class="form-check-inline mt-1 mb-4">
+        <div class="form-check-inline mt-1 mb-4 ml-3">
+
+          <label for="photo-<%= i %>">
+          <img class="img-thumbnail w-40 h-40" src="data:image/png;base64,<%= photo.data %>" alt="<%= photo.description %>">
+            <h5>O'chirilsinmi?</h5>
+          </label>
           <input type="checkbox" id="photo-<%= i %>" name="deletePhotos[]" value="<%= photo._id %>">
-          <label for="photo-<%= i %>">O'chirilsinmi?</label>
+
         </div>
         <% }) %>
       </div>
