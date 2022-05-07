@@ -22,4 +22,10 @@ const createPhotos = async (files, post_id) => {
   }
 };
 
-module.exports = createPhotos;
+const deletePhoto = async (photoIds = []) => {
+  for (const id of photoIds) {
+    await Photo.destroy({ where: { _id: id } });
+  }
+};
+
+module.exports = { createPhotos, deletePhoto };

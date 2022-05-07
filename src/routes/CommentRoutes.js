@@ -1,21 +1,12 @@
 const express = require("express");
-const { Comment } = require("../models/Comment");
+const {
+  postComments,
+  commentDelete,
+} = require("../controllers/CommentController");
+const catchAsync = require("../middlewares/tryCatchAsync");
 const CommentRoutes = express.Router();
 
-CommentRoutes.post("/post/:id/comment", async (req, res) => {
-  const { id } = req.params;
-  const { comment } = req.body;
-  const commentObj = Comment.build(comment);
-  commentObj.PostId = id;
-  await commentObj.save();
-  res.redirect(`/post/${id}`);
-});
-
-CommentRoutes.delete("/post/:id/comment/:commentId", (req, res) => {
-  const { id } = req.params;
-  const { commentId } = req.params;
-  Comment.destroy({ where: { _id: commentId } });
-  res.redirect(`/post/${id}`);
-});
+CommentRoutes.post("/post/:id/comment", catchAsync(postComments));
+CommentRoutes.delete("/post/:id/comment/:commentId", catchAsync(commentDelete));
 
 module.exports = CommentRoutes;

@@ -7,6 +7,7 @@
       action="/post/<%= post._id %>?_method=PUT"
       novalidate
       method="post"
+      enctype="multipart/form-data"
     >
       <div class="form-group my-3">
         <label for="title">Sarlavha</label>
@@ -28,7 +29,7 @@
           id="image"
           name="image"
         />
-      <div class="form-group my-3">
+      <div class="form-group my-3 ">
         <label for="body">Matn</label>
         <textarea
           class="form-control"
@@ -39,6 +40,17 @@
         >
 <%= post.body %></textarea
         >
+      </div>
+
+      <div class=" editPhoto">
+        <% photos.forEach((photo, i) => { %>
+          <img class="img-thumbnail w-40 h-40" src="data:image/png;base64,<%= photo.data %>" alt="<%= photo.description %>">
+      
+        <div class="form-check-inline mt-1 mb-4">
+          <input type="checkbox" id="photo-<%= i %>" name="deletePhotos[]" value="<%= photo._id %>">
+          <label for="photo-<%= i %>">O'chirilsinmi?</label>
+        </div>
+        <% }) %>
       </div>
       <button type="submit" class="btn btn-primary my-3">
         Postni O'zgartirish

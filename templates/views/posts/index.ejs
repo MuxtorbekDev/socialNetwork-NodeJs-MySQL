@@ -15,10 +15,14 @@
       <a class="btn btn-primary" href="/post/<%=post._id%>">Ba'tafsil O'qish</a>
     </div>
     <div class="cardImage">
+      <% if(post.Photos.length > 0) { %>
       <img
         src="data:image/png;base64,<%= post.Photos[0].dataValues.data %>"
         alt="<%= post.Photos[0].dataValues.description %>"
       />
+      <% } else { %>
+      <img src="../photo/imageNot.png" alt="No image" />
+      <% } %>
     </div>
   </div>
   <% } %>

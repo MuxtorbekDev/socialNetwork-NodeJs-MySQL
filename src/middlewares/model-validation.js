@@ -7,6 +7,7 @@ const validatePosts = (req, res, next) => {
       title: Joi.string().required(),
       body: Joi.string().required(),
     }).required(),
+    deletePhotos: Joi.array(),
   });
 
   const { error } = PostSchema.validate(req.body);
