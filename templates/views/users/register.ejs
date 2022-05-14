@@ -1,0 +1,78 @@
+<% layout(".././layouts/main") %>
+<div class="row">
+  <div class="col-4">
+    <h1>Profil Yaratish</h1>
+    <form
+      action="/register"
+      method="post"
+      enctype="multipart/form-data"
+      class="needs-validation"
+      novalidate
+    >
+      <div class="mb-3">
+        <label for="first_name" class="form-label">Ismingiz</label>
+        <input
+          type="text"
+          class="form-control"
+          name="user[first_name]"
+          placeholder="Ismingiz"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="surname" class="form-label">Familiyangiz</label>
+        <input
+          type="text"
+          id="surname"
+          name="user[surname]"
+          class="form-control"
+          placeholder="Familyangiz"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Elektron manzilingiz</label>
+        <input
+          type="email"
+          id="email"
+          name="user[email]"
+          class="form-control"
+          placeholder="email@email.com"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="avatar" class="form-label">Avatar</label>
+        <input
+          type="file"
+          id="avatar"
+          name="user[avatar]"
+          class="form-control"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="dob" class="form-label">To'g'ilgan yilingiz</label>
+        <input
+          type="date"
+          id="dob"
+          name="user[dob]"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Parolingiz</label>
+        <input
+          type="password"
+          id="password"
+          name="user[password]"
+          class="form-control"
+          placeholder="Parol"
+          required
+        />
+      </div>
+
+      <button class="btn btn-success">Ro'yxatdan o'tish</button>
+    </form>
+  </div>
+</div>
