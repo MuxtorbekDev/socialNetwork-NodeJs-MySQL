@@ -5,6 +5,7 @@ const path = require("path");
 const session = require("express-session");
 const methodOverride = require("method-override");
 const passport = require("passport");
+const flash = require("connect-flash");
 const { HomeControl } = require("./controllers/HomeContoller");
 const PostRouter = require("./routes/PostRoutes");
 const CommentRoutes = require("./routes/CommentRoutes");
@@ -34,8 +35,16 @@ app.use(
 );
 passport.initialize();
 app.use(passport.session());
+app.use(flash());
+
 require("./helpers/auth-local").localConfig(passport);
 
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  res.locals.user = req.user;
+  next();
+});
 // Routers Controller
 app.get("/", HomeControl);
 app.use(PostRouter);

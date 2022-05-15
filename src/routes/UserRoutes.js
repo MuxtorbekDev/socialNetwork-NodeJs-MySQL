@@ -4,13 +4,13 @@ const {
   loginUser,
   renderRegisterPage,
 } = require("../controllers/UserController");
-const { upload } = require("../middlewares/uploadImage");
 const catchAsync = require("../middlewares/tryCatchAsync");
 const UserRouter = express.Router();
 const passport = require("passport");
+const { upload } = require("../middlewares/uploadImage");
 
 UserRouter.get("/register", renderRegisterPage);
-UserRouter.post("/register", catchAsync(registerUser));
+UserRouter.post("/register", upload.single("avatar"), catchAsync(registerUser));
 UserRouter.post(
   "/login",
   passport.authenticate(

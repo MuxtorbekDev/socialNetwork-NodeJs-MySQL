@@ -1,0 +1,20 @@
+<% if(success && success.length) { %>
+<div class="alert alert-success alert desmissible fade show" role="alert">
+  <%= success %>
+  <button
+    type="button "
+    class="btn-close"
+    date-bs-dismiss="alert"
+    date-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
+<% } else if (error && error.length) { %> <%= error %>
+<button
+  type="button "
+  class="btn-close"
+  date-bs-dismiss="alert"
+  date-dismiss="alert"
+  aria-label="Close"
+></button>
+<% } %>

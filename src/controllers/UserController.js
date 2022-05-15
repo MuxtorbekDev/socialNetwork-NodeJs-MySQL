@@ -12,15 +12,16 @@ const registerUser = async (req, res, next) => {
       if (err) {
         return next(err);
       }
-      res.status(201).json({ xabar: "Siz ruyxatdan o'tdingiz" });
+      res.redirect("/posts");
     });
-    res.status(201).json(userObj);
   } catch (e) {
-    res.status(400).json({ message: e.message });
+    console.log(e);
+    res.redirect("/register");
   }
 };
+
 const loginUser = (req, res) => {
-  res.status(200).json({ msg: `Xush Kelibsiz ${req.user.first_name}` });
+  res.redirect("/posts");
 };
 
 module.exports = { registerUser, loginUser, renderRegisterPage };
