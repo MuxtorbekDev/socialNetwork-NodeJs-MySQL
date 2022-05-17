@@ -45,6 +45,7 @@ app.use((req, res, next) => {
   res.locals.user = req.user;
   next();
 });
+
 // Routers Controller
 app.get("/", HomeControl);
 app.use(PostRouter);

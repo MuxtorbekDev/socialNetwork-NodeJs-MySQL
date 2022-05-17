@@ -9,12 +9,14 @@
     aria-label="Close"
   ></button>
 </div>
-<% } else if (error && error.length) { %> <%= error %>
-<button
-  type="button "
-  class="btn-close"
-  date-bs-dismiss="alert"
-  date-dismiss="alert"
-  aria-label="Close"
-></button>
+<% } %> <% if (error && error.length) { %> <%= error %>
+<div class="alert alert-danger alert desmissible fade show" role="alert">
+  <button
+    type="button "
+    class="btn-close"
+    date-bs-dismiss="alert"
+    date-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
 <% } %>

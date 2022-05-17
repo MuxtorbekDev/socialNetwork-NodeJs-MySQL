@@ -20,8 +20,17 @@ const registerUser = async (req, res, next) => {
   }
 };
 
+const renderLoginPage = (req, res) => {
+  res.render("users/login");
+};
+
 const loginUser = (req, res) => {
   res.redirect("/posts");
 };
 
-module.exports = { registerUser, loginUser, renderRegisterPage };
+module.exports = {
+  registerUser,
+  loginUser,
+  renderRegisterPage,
+  renderLoginPage,
+};
