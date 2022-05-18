@@ -13,11 +13,12 @@ const localConfig = (passport) => {
         try {
           const user = await User.findOne({ where: { email: email } });
           if (!user) return done(null, user);
-          const isCorrectPassword = await User.verifyPassword(password);
+          const isCorrectPassword = await user.verifyPassword(password);
           if (!isCorrectPassword) return done(null, false);
           return done(null, user);
         } catch (e) {
-          throw new BlogError(e.message, 500);
+          // throw new BlogError(e.message, 500);
+          console.log(e);
         }
       }
     )
