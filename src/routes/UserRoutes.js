@@ -3,6 +3,7 @@ const {
   registerUser,
   loginUser,
   renderRegisterPage,
+  logoutUser,
   renderLoginPage,
 } = require("../controllers/UserController");
 const catchAsync = require("../middlewares/tryCatchAsync");
@@ -15,11 +16,12 @@ UserRouter.get("/login", renderLoginPage);
 UserRouter.post("/register", upload.single("avatar"), catchAsync(registerUser));
 UserRouter.post(
   "/login",
-  passport.authenticate(
-    "local",
-    { failureFlash: false, failureRedirect: "/" },
-    loginUser
-  )
+  passport.authenticate("local", {
+    failureFlash: false,
+    failureRedirect: "/login",
+  }),
+  loginUser
 );
+UserRouter.get("/logout", logoutUser);
 
 module.exports = UserRouter;

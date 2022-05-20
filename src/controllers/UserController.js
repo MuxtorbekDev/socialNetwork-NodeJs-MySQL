@@ -25,7 +25,12 @@ const renderLoginPage = (req, res) => {
 };
 
 const loginUser = (req, res) => {
-  res.redirect("/posts");
+  res.redirect(307, "/posts");
+};
+
+const logoutUser = (req, res) => {
+  req.logout();
+  res.redirect("/");
 };
 
 module.exports = {
@@ -33,4 +38,5 @@ module.exports = {
   loginUser,
   renderRegisterPage,
   renderLoginPage,
+  logoutUser,
 };

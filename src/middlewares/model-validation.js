@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { BlogErrors } = require("../helpers/BlogErrors");
+const { BlogError } = require("../helpers/BlogErrors");
 
 const validatePosts = (req, res, next) => {
   const PostSchema = Joi.object({
@@ -14,7 +14,8 @@ const validatePosts = (req, res, next) => {
 
   if (error) {
     const msg = error.details.map((v) => v.message).join();
-    throw new BlogErrors(msg, 400);
+    console.log(error);
+    throw new BlogError(msg, 400);
   }
   next();
 };
